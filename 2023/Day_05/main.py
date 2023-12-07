@@ -85,9 +85,45 @@ def location2(seeds, map_dict):
 
     return min(loc)
 
+def convert3(seed_array, mapp):
+    y = np.copy(seed_array)
+
+    for i, entry in enumerate(mapp):
+        dest, source, length = entry
+        mask = (source <= seed_array) & (seed_array < source + length)
+        y[mask] = seed_array[mask] - source + dest
+    return y
+    
+# seeds is a list of tuples
+# map_dict is a dictionary with values as nested lists
+# 
+def location3(seeds, map_dict):
+    # seeds contains list of tuples the are (ss, se), new tuples are added when they are 
+    # split off from the original segemnt (because we still need to evaluate it for the other mappings)  
+    #
+    for v in map_dict.values():   
+        new_range = []
+        while len(seeds) > 0:
+            ss, se = seeds.pop()
+            for a,b,c in v:
+                os = max(b, ss)
+                oe = min(b + c, se)
+                if oe > os:
+                    new_range.append((os - b + a, oe - b  + a))
+                    if (ss < os):
+                        seeds.append((ss, os))
+                    elif (se > oe):
+                        seeds.append((oe, se))
+                    break
+            else:
+                new_range.append((ss, se))
+
+        seeds = new_range
+    print(min(seeds)[0])
+
 if __name__ == '__main__':
-    path =  r'C:\AOC\2023\Day_05\test_data.txt'
-    # path =  r'C:\AOC\2023\Day_05\data.txt'
+    # path =  r'C:\AOC\2023\Day_05\test_data.txt'
+    path =  r'C:\AOC\2023\Day_05\data.txt'
 
     with open(path, 'r') as file:
         almanac = file.read().split('\n\n')
@@ -96,17 +132,25 @@ if __name__ == '__main__':
         seeds = [int(i) for i in seeds.split()]
         seed_range = []
         for i in range(0, len(seeds), 2):
-            seed_range.append((seeds[i],seeds[i+1])) 
+            seed_range.append((seeds[i],seeds[i] + seeds[i+1])) 
 
         map_dict = defaultdict()
-
         for line in almanac[1:]:
             map_name = line.split('\n')[0].split(' ')[0].split('-')[-1]
             map_list = [list(map(int, i.split())) for i in line.split(':\n')[1].split('\n')]
             map_dict[map_name] = map_list
-        
+
+    """ Part 1 """
     # loc = location(seeds, map_dict)
     # print(loc)
 
-    loc2 = location2(seed_range, map_dict)
-    print(loc2)
+
+    """ Part 2 """
+    # brute force using numpy
+    # loc2 = location2(seed_range, map_dict)
+    # print(loc2)
+
+    # implementation using ranges
+    loc2 = location3(seed_range, map_dict)
+    
+
