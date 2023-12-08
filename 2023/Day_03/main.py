@@ -1,6 +1,5 @@
 from collections import deque
 
-
 def check_adj(x, y, grid):
     new_loc = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
     is_symbol = False
