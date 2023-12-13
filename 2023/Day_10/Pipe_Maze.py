@@ -131,16 +131,43 @@ def steps(input):
     
     return (int(max_steps), answer)
 
+def flood_fill(coordinates, coord_set=None, current=None):
+
+    # Initialize the set on the first call
+    if coord_set is None:
+        coord_set = set(coordinates)
+
+    # Define a function to get neighbors of a given coordinate
+    def get_neighbors(coord):
+        x, y = coord
+        # Neighbors (up, down, left, right)
+        return [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
+
+    # If current is None, we start with the first coordinate
+    if current is None:
+        for coord in coordinates:
+            flood_fill(coordinates, coord_set, coord)
+    else:
+        neighbors = get_neighbors(current)
+        for neighbor in neighbors:
+            if neighbor not in coord_set:
+                coord_set.add(neighbor)
+                coordinates.append(neighbor)
+                flood_fill(coordinates, coord_set, neighbor)
+
+
 def find_area(path, grid):
     clockwise = []
     counter_clockwise = []
     count = 0
     
+    ''' for test data 1=3 and main data'''
     for i in range(0, len(path), 2):
         clockwise.append(path[i])
     for i in range(1, len(path) + 1, 2):
         counter_clockwise.append(path[i])    
 
+    ''' for test data 4 and 5'''
     # for i in range(0, len(path), 2):
     #     counter_clockwise.append(path[i])
     # for i in range(1, len(path) + 1, 2):
@@ -151,7 +178,7 @@ def find_area(path, grid):
     # print(counter_clockwise)
 
     for j in range(1):
-        visited = []
+        inside = []
 
         for i in range(len(clockwise) - 1):
             cr, cc = clockwise[i]
@@ -170,7 +197,7 @@ def find_area(path, grid):
                 if (dy,dx) not in path:
                     grid[dy][dx] = 'I'
                     path.append((dy,dx))
-                    visited.append((dy,dx))
+                    inside.append((dy,dx))
                     # print((dy,dx))
                     count += 1
 
@@ -192,45 +219,47 @@ def find_area(path, grid):
                 if (dy, dx) not in path:
                     grid[dy][dx] = 'I'
                     path.append((dy,dx))
-                    visited.append((dy,dx))
+                    inside.append((dy,dx))
                     count += 1
 
-        # print(visited)
 
-        new_loc = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
-        coor = ()
-
-        visited2 = []
-        for i in range(1):
-            for x,y in visited:
+        # print(len(path))
+        new_loc = [(-1, 0), (0, -1), (0, 1), (1, 0)]
+        visited = []
+        
+        for i in range(8):
+            for x,y in inside:
                 for loc in new_loc:
                     new_row, new_col = x + loc[0], y + loc[1]
-                    if 0 <= new_row < len(grid) and 0 <= new_col < len(grid[0]):
-                        new_pt = grid[new_row][new_col]
-                        if (new_row, new_col) not in path and (new_row, new_col) not in visited2:
-                            grid[new_row][new_col] = 'I'
-                            path.append((dy,dx))
-                            visited2.append((new_row, new_col))
-                            count += 1
-            visited = visited + visited2
-        
-        print(len(visited))
-        print(len(visited2))
-        # print(visited2)
+                    # if 0 <= new_row < len(grid) and 0 <= new_col < len(grid[0]):
+                    # new_pt = grid[new_row][new_col]
+                    if (new_row, new_col) not in path and (new_row, new_col) not in visited:
+                        grid[new_row][new_col] = 'I'
+                        path.append((dy,dx))
+                        visited.append((new_row, new_col))
+                        count += 1
+                        
+            # print(len(visited))
+            # print(len(path))
+            
+            inside = inside + visited
+
         # for i in grid:
         #     print(i)
 
-        # Join each list into a string
-        lines = [''.join(lst) for lst in grid]
-
-        # Join all lines into a single string separated by newlines
-        result = '\n'.join(lines)
-
-        print(result)
-
-    # print(grid)
     print(count)
 
+def find_inside(path,grid):
+    
+    for i in grid:
+            print(i)
+    
+    grid = np.array(grid)
+    print(grid.shape)
+
+    arr = [(x,y) in path for x in range(grid.shape[0]) for y in range(grid.shape[1])]
+    arr = np.array(arr).reshape(grid.shape)    
+    print(arr)
 
 
  
@@ -260,8 +289,10 @@ if __name__ == '__main__':
 
     # print(array)
     
-
+    
     find_area(pipe_path, input2)
+
+    # find_inside(pipe_path, input2)
 
 
 
