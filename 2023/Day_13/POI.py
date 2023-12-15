@@ -72,8 +72,8 @@ def main(data):
 
 if __name__ == '__main__':
 
-    # path = r'C:\AOC\2023\Day_13\test_data.txt'
-    path = r'C:\AOC\2023\Day_13\data.txt'
+    path = r'C:\AOC\2023\Day_13\test_data.txt'
+    # path = r'C:\AOC\2023\Day_13\data.txt'
 
     with open(path, 'r') as file:
         input = [np.array([[k for k in j] for j in i.split()]) for i in file.read().split('\n\n')]
