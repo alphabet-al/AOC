@@ -56,6 +56,7 @@ def find_n():
 
         curr_list = intervals.popleft()
         tracking.append((curr_list, node))
+        
         xmin, xmax = curr_list[0]
         mmin, mmax = curr_list[1]
         amin, amax = curr_list[2]
@@ -71,23 +72,22 @@ def find_n():
 
         if node == 'A':
             A.append(curr_list)
-            print('part accepted, appending to A')
+            # print('part accepted, appending to A')
             continue
         elif node == 'R':
-            print('part rejected')
+            # print('part rejected')
             continue
 
         qc_cond = system_dict[node]
-        print(qc_cond)
-
+        
         for conditions in qc_cond[:-1]:
             ch, cond, value = re.split (re_pattern, conditions[0] )
             value = int(value)
 
-            xmin, xmax = curr_list[0]
-            mmin, mmax = curr_list[1]
-            amin, amax = curr_list[2]
-            smin, smax = curr_list[3]
+            xmin, xmax = oxmin, oxmax
+            mmin, mmax = ommin, ommax
+            amin, amax = oamin, oamax
+            smin, smax = osmin, osmax
 
             if ch == 'x':
                 if cond == '<' and curr_list[0][1] > value:
@@ -135,6 +135,7 @@ def find_n():
 
         else:
             new_list = [[oxmin, oxmax], [ommin, ommax], [oamin,oamax], [osmin,osmax]]
+            
             intervals.append(new_list)
             nodes.append(qc_cond[-1][0])
             # print("no other rules met, default condition applied")
@@ -149,7 +150,6 @@ def calculate_combinations(ranges_list):
         for r in ranges:
             min_val, max_val = r
             combinations_for_this_list *= (max_val - min_val + 1)
-
         total_combinations += combinations_for_this_list
 
     return total_combinations
@@ -174,7 +174,7 @@ def main(pt, part_two=False):
         #     print(i)
         # for i in A_list:
         #     print(i)
-        print(A_list)
+        # print(A_list)
         total = calculate_combinations(A_list)
 
 
@@ -184,8 +184,8 @@ def main(pt, part_two=False):
 
 if __name__ == '__main__':
 
-    path = r'C:\AOC\2023\Day_19\test_data.txt'
-    # path = r'C:\AOC\2023\Day_19\data.txt'
+    # path = r'C:\AOC\2023\Day_19\test_data.txt'
+    path = r'C:\AOC\2023\Day_19\data.txt'
     
     # 167_409_079_868_000
     with open(path, 'r') as file:
