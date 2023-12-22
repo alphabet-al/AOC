@@ -43,13 +43,13 @@ class FF_module(Mod):
             for each in self.destinations:
                 event_q.append((self, 'HIGH', each))   
                 hp += 1             
-                print(f"{self.name} - HIGH -> {each}")
+                # print(f"{self.name} - HIGH -> {each}")
 
         elif self.current_state == 'ON' and pulse == 'LOW':
             for each in self.destinations:
                 event_q.append((self, 'LOW', each)) 
                 lp += 1               
-                print(f"{self.name} LOW -> {each}")
+                # print(f"{self.name} LOW -> {each}")
 
 
     def transition(self, event):
@@ -59,10 +59,11 @@ class FF_module(Mod):
             self.current_state = self.transitions[self.current_state][pulse]
             # print(f'Transitioned {self.name} to {self.current_state}')
 
-        else:
+        # else:
             # print(f'Invalid event for current state')
-            return
+            # return
 
+        return True
 
 class Con_module(Mod):
     def __init__(self, name):
@@ -83,18 +84,19 @@ class Con_module(Mod):
             for each in self.destinations:
                 event_q.append((self, 'LOW', each))  
                 lp += 1              
-                print(f"{self.name} - LOW -> {each}")
+                # print(f"{self.name} - LOW -> {each}")
         else: 
             for each in self.destinations:
                 event_q.append((self, 'HIGH', each))                
                 hp += 1
-                print(f"{self.name} - HIGH -> {each}")
+                # print(f"{self.name} - HIGH -> {each}")
 
 
     def transition(self, event):
         from_mod, pulse, _ = event
         self.memory[from_mod] = pulse
         self.add_to_queue()
+        return True
 
     def add_input(self, ob):
         self.memory[ob] = 'LOW'
@@ -118,7 +120,7 @@ class B_mod(Mod):
             elif pulse == 'HIGH':
                 hp += 1
 
-            print(f"{self.name} - pulse -> {each}")
+            # print(f"{self.name} - pulse -> {each}")
 
 
     def transition(self, pulse):
@@ -128,9 +130,12 @@ class outmod(Mod):
     def __init__(self, name):
         super().__init__(name)
 
-    def transition(self, pulse):
+    def transition(self, event):
+        fr, pulse, to = event
+        print(pulse)
         if pulse == 'LOW':
             return False
+        return True
 
 
 def parse(data):
@@ -179,8 +184,10 @@ def press_button():
 
     while event_q:
         event = event_q.popleft()
-        event[2].transition(event)
-
+        continue_loop = event[2].transition(event)
+        if not continue_loop:
+            return False
+        return True
 
 
 
@@ -191,17 +198,22 @@ def main(data):
     iterations = 1000
 
     """ part 1 """
-    for i in range(iterations):
-        lp += 1
-        press_button()  
-    print(lp * hp)
-
-    """ part 2 """
-    # count = 1   
-
-    # while True:
+    # for i in range(iterations):
     #     lp += 1
     #     press_button()  
+    # print(lp * hp)
+
+    """ part 2 """
+    count = 0
+
+    while True:
+        count += 1
+        keep_pressing = press_button()  
+        if not keep_pressing:
+            break
+    
+    print(count)
+        
  
 
 if __name__ == '__main__':
