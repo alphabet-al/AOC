@@ -1,5 +1,6 @@
 import re
 from collections import deque
+import matplotlib.pyplot as plt
 
 event_q = deque()
 con_list = []
@@ -189,30 +190,46 @@ def press_button():
             return False
         return True
 
+def plot_pulses(pulse_data):
+    # Assuming pulse_data is a list of lists, where each sublist contains pulses at a time step
+    plt.figure(figsize=(10, 6))
+    
+    for i, pulses in enumerate(pulse_data):
+        plt.plot([i] * len(pulses), pulses, 'o')  # Plot each pulse
+
+    plt.xlabel('Time Step')
+    plt.ylabel('Pulses')
+    plt.title('Pulse Simulation Over Time')
+    plt.show()
 
 
 
 def main(data):
     global lp, hp
     parse(data)
-    iterations = 1000
+    iterations = 5
+
+    pulse_data = []
 
     """ part 1 """
-    # for i in range(iterations):
-    #     lp += 1
-    #     press_button()  
+    for i in range(iterations):
+        lp += 1
+        press_button()  
+        pulse_data.append((lp, hp))
     # print(lp * hp)
+    # print(pulse_data)
+    plot_pulses(pulse_data)
 
     """ part 2 """
-    count = 0
+    # count = 0
 
-    while True:
-        count += 1
-        keep_pressing = press_button()  
-        if not keep_pressing:
-            break
+    # while True:
+    #     count += 1
+    #     keep_pressing = press_button()  
+    #     if not keep_pressing:
+    #         break
     
-    print(count)
+    # print(count)
         
  
 
