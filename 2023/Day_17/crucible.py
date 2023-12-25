@@ -48,7 +48,7 @@ def three_same_dir(path):
         else:
             same_direction_count = 1
 
-        if same_direction_count >= 3:
+        if same_direction_count > 3:
             return True
 
         last_direction = direction
@@ -57,7 +57,7 @@ def three_same_dir(path):
 
 
 # use node values as g(n)
-def A_star(grid, start, end):
+def ucs(grid, start, end):
     # visited contains nodes we have popped off priority queue
     visited = set()
     # priority queue contains tuple of states to be expanded. tuple is in the form of (cost, path, node state).
@@ -65,7 +65,8 @@ def A_star(grid, start, end):
     # root_state comprised of start node, empty path list, g_cost, direction, moves in direction
     root_state = (start, [], 0)
     # root_cost is the h_cost of the start state
-    root_cost = manhattan(root_state[0].coordinates, end.coordinates) + root_state[-1]
+    root_cost = root_state[-1]
+
     # push root_cost(fcost of the start state) and root_state(start state) on to priority queue
     heapq.heappush(fringe, (root_cost, root_state))
     
@@ -74,6 +75,10 @@ def A_star(grid, start, end):
         node_f_cost, node_state = heapq.heappop(fringe)
         node, path, node_g_cost = node_state
 
+        print(path)
+            
+        
+        
         if node.coordinates == end.coordinates:
             return node_g_cost, path
        
@@ -87,14 +92,8 @@ def A_star(grid, start, end):
 
                     if not three_same_dir(new_path):
                         g_cost = node_g_cost + child.cost
-                        # print(g_cost, child.coordinates)
                         newState = (child, new_path, g_cost)
-                        # h_cost = manhattan(child.coordinates, end.coordinates)
-                        h_cost = 0
-                        f_cost = g_cost + h_cost
-                        
-                        # print(f_cost, child.coordinates)
-                        heapq.heappush(fringe, (f_cost, newState))
+                        heapq.heappush(fringe, (g_cost, newState))
 
     return None
 
@@ -103,7 +102,7 @@ def main(data, part_two=False):
     root_node = data[0][0]
     end_node = data[-1][-1]
 
-    heatloss, path = A_star(data, root_node, end_node)
+    heatloss, path = ucs(data, root_node, end_node)
 
 
     return heatloss, path
@@ -129,9 +128,10 @@ if __name__ == '__main__':
     
     mapp = np.array(input)
     test = np.zeros_like(mapp)
-    print(path)
-    for i, coor in enumerate(path):
-        r,c = coor
-        test[r][c] = i+1
+    # for i in path:
+    #     print(i, input[i[0]][i[1]])
+    # for i, coor in enumerate(path):
+    #     r,c = coor
+    #     test[r][c] = i+1
     
-    print(test)
+    # print(test)
