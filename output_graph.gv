@@ -1,0 +1,49 @@
+// The Graph
+digraph {
+	jqt [label=jqt]
+	jqt -> rhn
+	jqt -> xhk
+	jqt -> nvd
+	rsh [label=rsh]
+	rsh -> frs
+	rsh -> pzl
+	rsh -> lsr
+	xhk [label=xhk]
+	xhk -> hfx
+	cmg [label=cmg]
+	cmg -> qnr
+	cmg -> nvd
+	cmg -> lhk
+	cmg -> bvb
+	rhn [label=rhn]
+	rhn -> xhk
+	rhn -> bvb
+	rhn -> hfx
+	bvb [label=bvb]
+	bvb -> xhk
+	bvb -> hfx
+	pzl [label=pzl]
+	pzl -> lsr
+	pzl -> hfx
+	pzl -> nvd
+	qnr [label=qnr]
+	qnr -> nvd
+	ntq [label=ntq]
+	ntq -> jqt
+	ntq -> hfx
+	ntq -> bvb
+	ntq -> xhk
+	nvd [label=nvd]
+	nvd -> lhk
+	lsr [label=lsr]
+	lsr -> lhk
+	rzs [label=rzs]
+	rzs -> qnr
+	rzs -> cmg
+	rzs -> lsr
+	rzs -> rsh
+	frs [label=frs]
+	frs -> qnr
+	frs -> lhk
+	frs -> lsr
+}
