@@ -48,12 +48,13 @@ def three_same_dir(path):
         else:
             same_direction_count = 1
 
-        if same_direction_count > 3:
+        if same_direction_count == 4:
             return True
 
         last_direction = direction
 
     return False
+
 
 
 # use node values as g(n)
@@ -75,7 +76,7 @@ def ucs(grid, start, end):
         node_f_cost, node_state = heapq.heappop(fringe)
         node, path, node_g_cost = node_state
 
-        print(path)
+        # print(path)
             
         
         
@@ -124,6 +125,7 @@ if __name__ == '__main__':
                 nodes[i][j].set_children(nodes)
                 
     total, path = main(nodes, part_two = False)
+    
     print(total)
     
     mapp = np.array(input)
