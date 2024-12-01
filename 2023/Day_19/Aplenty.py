@@ -184,8 +184,8 @@ def main(pt, part_two=False):
 
 if __name__ == '__main__':
 
-    # path = r'C:\AOC\2023\Day_19\test_data.txt'
-    path = r'C:\AOC\2023\Day_19\data.txt'
+    path = r'C:\AOC\2023\Day_19\test_data.txt'
+    # path = r'C:\AOC\2023\Day_19\data.txt'
     
     # 167_409_079_868_000
     with open(path, 'r') as file:
@@ -201,6 +201,7 @@ if __name__ == '__main__':
             various = [i.split(':') for i in conditions.strip('}').split(',')]
             system_dict[key] = various   
 
+    print(system_dict)
     total = main(parts, part_two=True)
     print(total)
 
