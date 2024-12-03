@@ -69,49 +69,92 @@ Update your analysis by handling situations where the Problem Dampener can remov
 
 """
 
-def is_safe(rpt):
+def is_safe(rpt, pt2):
     state = None
+    l = 0
+    r = 1
 
-    for i in range(1, len(rpt)):
-     
-        a = rpt[i-1]
-        b = rpt[i]
+    while r < len(rpt):
+        a = rpt[l]
+        b = rpt[r]
 
         if b == a:
-            return 0
+  
+            if pt2:
+                l_rpt = rpt.copy()
+                l_rpt.pop(l)
+                r_rpt = rpt.copy()
+                r_rpt.pop(r)
+
+                if is_safe(l_rpt, pt2=False) or is_safe(r_rpt, pt2=False):
+                    return 1
+                else:
+                    print(rpt)
+                    return 0
+               
+            else:
+                return 0
         
         if b - a > 0:
             curr_state = 1
         else:
             curr_state = -1
 
-        if i == 1:
+        if r == 1:
             state = curr_state
 
         if curr_state != state:
-            return 0
+
+            if pt2:
+                l_rpt = rpt.copy()
+                l_rpt.pop(l)
+                r_rpt = rpt.copy()
+                r_rpt.pop(r)
+
+                if is_safe(l_rpt, pt2=False) or is_safe(r_rpt, pt2=False):
+                    return 1
+                else:
+                    print(rpt)
+                    return 0
+               
+            else:
+                return 0
         
         if not(0 < abs(b - a) < 4):
-            return 0
+  
+            if pt2:
+                l_rpt = rpt.copy()
+                l_rpt.pop(l)
+                r_rpt = rpt.copy()
+                r_rpt.pop(r)
+
+                if is_safe(l_rpt, pt2=False) or is_safe(r_rpt, pt2=False):
+                    return 1
+                else:
+                    print(rpt)
+                    return 0
+               
+            else:
+                return 0
         
+        l += 1
+        r += 1
     return 1
 
 def main(data, pt2 = False):
     count = 0
 
     for report in data:
-        if pt2 == False:
-            count += is_safe(report)
-        else:
-            if any(is_safe(report[:n] + report[n+1:]) for n in range(len(report))):
-                count += 1
-
+        count += is_safe(report, pt2 = pt2) 
+        
     return count
 
 
 if __name__ == "__main__":
     # path = r"C:\AOC\2024\day_02\test_data.txt"
-    path = r"C:\AOC\2024\day_02\data.txt"    
+    # path = r"C:\AOC\2024\day_02\data.txt"
+    path = r"C:\AOC\2024\day_02\test_data2.txt"
+    
 
     with open(path, "r") as f:
         data = list( list(map(int, lvl.split())) for lvl in f.read().splitlines() )
