@@ -40,6 +40,7 @@ def FindTopologicalOrdering(g):
 # 'g' is a directed acyclic graph represented as a adjacency list
 g = {'A': ['B', 'C', 'D'], 'B': ['C'], 'C': [], 'D': ['C']}
 
+
 ordering = FindTopologicalOrdering(g)
 print(ordering)
         
