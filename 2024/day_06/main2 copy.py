@@ -1,6 +1,7 @@
 import numpy as np
 import copy
 from tqdm import tqdm
+from line_profiler import LineProfiler
 
 def parse(grid):
     for i, row in enumerate(grid):
@@ -64,5 +65,13 @@ if __name__ == "__main__":
     with open(path, "r") as f:
         grid = [[ch for ch in row] for row in f.read().splitlines()]
         
-    ans = main(grid)
-    print(f"Number of distinct positions: {ans}")
+    # ans = main(grid)
+    # print(f"Number of distinct positions: {ans}")
+
+
+    lp = LineProfiler()
+    lp.add_function(pathfind)
+    lp.run('main(grid)')
+    lp.print_stats()
+
+    
