@@ -24,9 +24,10 @@ def unique_trails(trailheads, grid, pt2):
 
        
         if curr_value == 9:
-            if not pt2 and pos not in visited:  # part 1 only wants to know if there is a valid path to 9, so we only count if we can reach 9 at least once.
-                visited.add(pos)
-                return 1
+            if not pt2:
+                if pos not in visited:  # part 1 only wants to know if there is a valid path to 9, so we only count if we can reach 9 at least once.
+                    visited.add(pos)
+                    return 1
             else:
                 visited.add(pos)    # part 2 condition for valid trail from trailhead counts all paths from trailhead to 9, so we don't need to check if 9 was ever visited, we just count all occurances
                 return 1
