@@ -6,39 +6,34 @@ def in_bounds(r,c):
     
 def dfs(r, c, curr_region, visited):
     dir = [(-1,0), (1,0), (0,-1), (0,1)]
-    perimeter = 0
-    area = 1
-    
-    if not in_bounds(r,c) or grid[r][c] != curr_region:
-        return 0,1
-    
-    if (r, c) in visited:
-        return 0,0
-    
-    visited.add((r,c))
-    
+    path = [(r, c)]
+        
+    if grid[r][c] != curr_region:
+        return []
+
+    if (r, c) not in visited:
+        visited.add((r,c))
+  
     for dr, dc in dir:
         nr = r + dr
         nc = c + dc
-    
-        dfs_area, dfs_perimeter = dfs(nr, nc, curr_region, visited)
-        area += dfs_area
-        perimeter += dfs_perimeter
-        
-        
-    return area, perimeter
-  
+
+        if in_bounds(nr,nc) and (nr,nc) not in visited:
+            dfs_area = dfs(nr, nc, curr_region, visited)
+            path.extend(dfs_area)
+                
+    return path
 
 
 def calculate_price(grid):
-    price = 0
     visited = set()
 
     for r, row in enumerate(grid):
         for c, ch in enumerate(row):
-            area, perimeter= dfs(r, c, ch, visited)
-            price += (area * perimeter)
-    return price
+            if (r,c) not in visited:
+                path = dfs(r, c, ch, visited)
+                print(path)
+    return
 
 
 
