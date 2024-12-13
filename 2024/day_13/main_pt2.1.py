@@ -1,43 +1,27 @@
+import numpy as np
+
 from collections import deque
 from heapq import heapify,heappop,heappush
 from functools import cache
+from numpy.linalg import solve
 
-@cache
-def bfs(A, B, PRIZE):
-    buttons = [A, B]
-    q = []
-    heappush(q, (0, (PRIZE[0], PRIZE[1])))
-
-    while q:
-        cost, (x,y) = heappop(q)
-        
-        if x == 0 and y == 0:
-            return cost
-               
-        for i, button in enumerate(buttons):
-            
-            if i == 0:
-                newcost = cost + 3
-            else:
-                newcost = cost + 1
-            nx = x - button[0]
-            ny = y - button[1]
-            
-            if nx < 0 or ny < 0:
-                continue
-            
-            if (newcost, (nx,ny)) not in q:
-                heappush(q, (newcost, (nx, ny)))
-
-    return 0
 
 
 def main(machines):
     cost = 0
     for v in machines.values():
+        path_cost = np.array([3, 1])
         A, B, PRIZE = v
-        cost += bfs(A, B, PRIZE)
-    return cost 
+        b = np.array( [PRIZE[0] + 10000000000000, PRIZE[1] + 10000000000000] )
+        a = np.array( [ [A[0], B[0]], 
+                        [A[1], B[1]] 
+                      ])
+        ans = np.round(solve(a,b), decimals=3)
+
+        if ans[0] % 1 == ans[1] % 1 == 0:
+            cost += ans @ path_cost
+
+    return int(cost)
 
     
 

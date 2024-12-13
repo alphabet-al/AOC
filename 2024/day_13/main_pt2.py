@@ -1,21 +1,24 @@
 from collections import deque
 from heapq import heapify,heappop,heappush
 from functools import cache
+import sys
 
-@cache
-def bfs(A, B, PRIZE):
+sys.setrecursionlimit(100000000)
+
+def dfs_min_cost(A, B, x, y):
     buttons = [A, B]
-    q = []
-    heappush(q, (0, (PRIZE[0], PRIZE[1])))
 
-    while q:
-        cost, (x,y) = heappop(q)
-        
+    @cache    
+    def dfs(x, y, cost):
+        print(x,y)        
         if x == 0 and y == 0:
             return cost
-               
+        
+        if x < 0 or y < 0:
+            return float("inf")
+        
+        min_cost = float("inf")
         for i, button in enumerate(buttons):
-            
             if i == 0:
                 newcost = cost + 3
             else:
@@ -23,27 +26,33 @@ def bfs(A, B, PRIZE):
             nx = x - button[0]
             ny = y - button[1]
             
-            if nx < 0 or ny < 0:
-                continue
+            min_cost =  min( min_cost, ( dfs(nx, ny, newcost) )) 
             
-            if (newcost, (nx,ny)) not in q:
-                heappush(q, (newcost, (nx, ny)))
+        return min_cost
 
-    return 0
+    return dfs(x, y, 0)
 
 
-def main(machines):
+
+def main(machines, pt2 = False):
     cost = 0
     for v in machines.values():
         A, B, PRIZE = v
-        cost += bfs(A, B, PRIZE)
+        if not pt2:
+            x,y = PRIZE
+        else:
+            x,y = PRIZE[0] + 10000000000000, PRIZE[1] + 10000000000000
+        dfs_cost = dfs_min_cost(A, B, x, y)
+        print(dfs_cost)
+        if dfs_cost != float("inf"):
+            cost += dfs_cost
     return cost 
 
     
 
 if __name__ == "__main__":
-    # path = r"C:\AOC\2024\day_13\test_data.txt" 
-    path = r"C:\AOC\2024\day_13\data.txt" 
+    path = r"C:\AOC\2024\day_13\test_data.txt" 
+    # path = r"C:\AOC\2024\day_13\data.txt" 
 
     with open(path, "r") as f:
         machines = f.read().split("\n\n")
@@ -60,5 +69,5 @@ if __name__ == "__main__":
                 temp.append((int(jx),int(jy)))
             claw_machines[i] = temp
             
-    tokens = main(claw_machines)
+    tokens = main(claw_machines, pt2 = True)
     print(f"Fewest tokens: {tokens}")
