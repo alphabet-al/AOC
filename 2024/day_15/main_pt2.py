@@ -5,8 +5,17 @@ with open(path, "r") as f:
     grid, moves = f.read().split("\n\n")
     grid = [[ch for ch in row] for row in grid.splitlines()]
     moves = [move for move in moves if move != '\n']
-    # print(moves)
-        
+    
+
+tile_mapping = {
+    "#": "##",
+    ".": "..",
+    "O": "[]",
+    "@": "@."
+}    
+
+new_grid = [[char for ch in row for char in tile_mapping[ch]] for row in grid]
+
 movements = {
             "^": (-1, 0),
             "v": (1, 0),
@@ -14,7 +23,7 @@ movements = {
             ">": (0, 1)
             }
 
-pos = [(i,j) for i, row in enumerate(grid) for j, col in enumerate(row) if col == "@" ]
+pos = [(i,j) for i, row in enumerate(new_grid) for j, col in enumerate(row) if col == "@" ]
 pos_r, pos_c = pos[0]
 
 
@@ -28,13 +37,13 @@ def move(r, c, dr, dc):
     nr = r + dr
     nc = c + dc
 
-    if grid[r][c] == "#":
+    if new_grid[r][c] == "#":
         return 0
 
-    if grid[r][c] == ".":
+    if new_grid[r][c] == ".":
         return 1
 
-    if grid[r][c] == "O":
+    if new_grid[r][c] == "O":
 
         if move(nr, nc, dr, dc):
             swap(r, c, nr, nc)
@@ -51,7 +60,7 @@ for dir in moves:
         swap(pos_r, pos_c, pos_r + dr, pos_c + dc)
         pos_r, pos_c = (pos_r + dr, pos_c + dc)
         
-for row in grid:
+for row in new_grid:
     print(row)
 
 GPS = [i*100 + j for i, row in enumerate(grid) for j, col in enumerate(grid[0]) if grid[i][j] == "O"]
