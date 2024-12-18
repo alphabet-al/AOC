@@ -46,7 +46,7 @@ def A_star(grid, start, end):
         node_coor, path, node_g_cost = node_state
 
         if node_coor == end:
-            return path
+            return True
             # return node_g_cost, path
        
         if node_coor not in visited:
@@ -70,26 +70,42 @@ def A_star(grid, start, end):
                     # print(f_cost, child.coordinates)
                     heapq.heappush(fringe, (f_cost, newState))
 
-    return None
+    return False
+
+
+
+
+
+
 
 def main(input):
-    n = 12
-    grid_shape = (7, 7)
+    grid_shape = (71, 71)
     grid = [["." for _ in range(grid_shape[1])] for _ in range(grid_shape[0])]
+    start = (0, 0)
     end = (len(grid[0]) - 1, len(grid[1]) - 1)
-    new_grid = generate_grid(n, input, grid)
-    steps = A_star(new_grid, (0,0), end)
+    low = 0
+    high = len(input) - 1
 
-    return steps
+    while low <= high:
+        mid = low + (high - low) // 2
+        
+        new_grid = generate_grid(mid, input, grid)
+
+        if A_star(new_grid, start, end):
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    print(input[low - 1])
+    
+    
 
 if __name__ == "__main__":
-    path = r"C:\AOC\2024\day_18\test_data.txt"
-    # path = r"C:\AOC\2024\day_18\data.txt"
+    # path = r"C:\AOC\2024\day_18\test_data.txt"
+    path = r"C:\AOC\2024\day_18\data.txt"
 
     with open(path, "r") as f:
         input = [tuple(int(ch) for ch in row.split(",")) for row in f.read().splitlines()]
         
 
-    min_steps = main(input)
-    print(min_steps)
-    print(len(min_steps))
+    main(input)

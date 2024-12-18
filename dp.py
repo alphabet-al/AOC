@@ -1,3 +1,6 @@
+# https://www.youtube.com/watch?v=oBt53YbR9Kk&t=7214s
+# freeCodeCamp.org tutorial on dynamic programming
+
 from functools import lru_cache, cache
 import time
 
@@ -179,31 +182,100 @@ import time
 # print(howSumWrapper(7, [5,3,4,7]))   # [3,4]
 # print(howSumWrapper(300, [7, 14])) # None
 
-@cache
-def bestSum(target, numbers):    
+# @cache
+# def bestSum(target, numbers):    
 
-    if target == 0:
-        return []
+#     if target == 0:
+#         return []
     
-    if target < 0:
-        return None
+#     if target < 0:
+#         return None
     
-    shortest_combination = None
-    for num in numbers:
-        new_target = target - num
-        new_target_result = bestSum(new_target, numbers)
-        if new_target_result != None:
-            combination =  [*new_target_result, num]
-            if shortest_combination is None or len(combination) < len(shortest_combination):
-                shortest_combination = combination
+#     shortest_combination = None
+#     for num in numbers:
+#         new_target = target - num
+#         new_target_result = bestSum(new_target, numbers)
+#         if new_target_result != None:
+#             combination =  [*new_target_result, num]
+#             if shortest_combination is None or len(combination) < len(shortest_combination):
+#                 shortest_combination = combination
 
-    return shortest_combination
+#     return shortest_combination
 
-def bestSumWrapper(target, numbers):
-    return bestSum(target, tuple(numbers))
+# def bestSumWrapper(target, numbers):
+#     return bestSum(target, tuple(numbers))
 
 
-print(bestSumWrapper(7, [5,3,4,7]))   # [7]
-print(bestSumWrapper(8, [2,3,5]))   # [3,5]
-print(bestSumWrapper(8, [1,4,5]))   # [4,4]
-print(bestSumWrapper(100, [1,2,5,25]))   # [25,25,25,25]
+# print(bestSumWrapper(7, [5,3,4,7]))   # [7]
+# print(bestSumWrapper(8, [2,3,5]))   # [3,5]
+# print(bestSumWrapper(8, [1,4,5]))   # [4,4]
+# print(bestSumWrapper(100, [1,2,5,25]))   # [25,25,25,25]
+
+# @cache
+# def canConstruct(target, wordBank):
+#     if len(target) == 0:
+#         return True
+    
+#     for word in wordBank:
+#         front = target[:len(word)]
+#         back = target[len(target) - len(word):]
+#         if word in front:
+#             new_target = target[len(word):]
+#             # print('front', new_target)
+#             if canConstruct(new_target, wordBank):
+#                 return True
+#         elif word in back:
+#             # print('back', new_target)
+#             new_target = target[:len(target) - len(word)]
+#             if canConstruct(new_target, wordBank):
+#                 return True
+    
+#     return False
+
+
+# def canConstructWrapper(target, wordBank):
+#     return canConstruct(target, tuple(wordBank))
+
+
+# print(canConstructWrapper('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']))   # true
+# print(canConstructWrapper('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']))    # false
+# print(canConstructWrapper('', ['cat', 'dog', 'mouse']))    # true
+# print(canConstructWrapper('enterapotentpot', ['a', 'p', 'ent', 'enter', 'ot', 'o', 't']))  # true
+# print(canConstructWrapper('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'ee', 'eee', 'eeee', 'eeeee', 'eeeeee']))  # false
+
+
+def canConstruct(target, wordBank, memo = None):
+    if memo is None:
+        memo = {}
+
+    if target in memo:
+        return memo[target]
+
+    if len(target) == 0:
+        return True
+    
+    for word in wordBank:
+        front = target[:len(word)]
+        back = target[len(target) - len(word):]
+        if word in front:
+            new_target = target[len(word):]
+            if canConstruct(new_target, wordBank, memo):
+                memo[new_target] = True
+                return True
+        elif word in back:
+            new_target = target[:len(target) - len(word)]
+            if canConstruct(new_target, wordBank, memo):
+                memo[new_target] = True
+                return True
+    
+    memo[target] = False
+
+    return False
+
+
+print(canConstruct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']))   # true
+print(canConstruct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']))    # false
+print(canConstruct('', ['cat', 'dog', 'mouse']))    # true
+print(canConstruct('enterapotentpot', ['a', 'p', 'ent', 'enter', 'ot', 'o', 't']))  # true
+print(canConstruct('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'ee', 'eee', 'eeee', 'eeeee', 'eeeeee']))  # false
+
