@@ -244,7 +244,114 @@ import time
 # print(canConstructWrapper('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'ee', 'eee', 'eeee', 'eeeee', 'eeeeee']))  # false
 
 
-def canConstruct(target, wordBank, memo = None):
+# def canConstruct(target, wordBank, memo = None):
+#     if memo is None:
+#         memo = {}
+
+#     if target in memo:
+#         return memo[target]
+
+#     if len(target) == 0:
+#         return True
+    
+#     for word in wordBank:
+#         w = len(word)
+#         front = target[:w]
+#         back = target[-w:]
+#         if word in front:
+#             new_target = target[w:]
+#             if canConstruct(new_target, wordBank, memo):
+#                 memo[new_target] = True
+#                 return True
+#         elif word in back:
+#             new_target = target[:-w]            
+#             if canConstruct(new_target, wordBank, memo):
+#                 memo[new_target] = True
+#                 return True
+    
+#     memo[target] = False
+
+#     return False
+
+
+# print(canConstruct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']))   # true
+# print(canConstruct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']))    # false
+# print(canConstruct('', ['cat', 'dog', 'mouse']))    # true
+# print(canConstruct('enterapotentpot', ['a', 'p', 'ent', 'enter', 'ot', 'o', 't']))  # true
+# print(canConstruct('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'ee', 'eee', 'eeee', 'eeeee', 'eeeeee']))  # false
+# print(canConstruct('ubwu', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # false
+
+# def canConstruct(target, wordbank, memo = None):
+#     if memo is None:
+#         memo = {}
+
+#     if target in memo:
+#         return memo[target]
+
+#     if len(target) == 0:
+#         return True
+    
+#     for word in wordbank:
+#         w = len(word)
+#         front = target[:w]
+#         back = target[-w:]
+        
+#         if word == front:
+#             new_target = target[w:]
+#             if canConstruct(new_target, wordbank, memo):
+#                 memo[new_target] = True
+#                 return True
+#         elif word == back:
+#             new_target = target[:-w]
+#             if canConstruct(new_target, wordbank, memo):
+#                 memo[new_target] = True
+#                 return True
+        
+#     memo[target] = False
+    
+#     return False
+
+# print(canConstruct('brwrr', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+
+# def howManyConstruct(target, wordbank, memo = None):
+#     how_many = 0
+
+#     if memo is None:
+#         memo = {}
+
+#     if target in memo:
+#         return memo[target]
+
+#     if len(target) == 0:
+#         return 1
+    
+#     for word in wordbank:
+#         w = len(word)
+#         front = target[:w]
+#         back = target[-w:]
+        
+#         if word == front:
+#             new_target = target[w:]
+#             how_many += howManyConstruct(new_target, wordbank, memo)
+#             memo[target] = how_many
+            
+#         elif word == back:
+#             new_target = target[:-w]
+#             how_many += howManyConstruct(new_target, wordbank, memo)
+#             memo[target] = how_many
+            
+        
+#     memo[target] = how_many
+    
+#     return how_many
+
+# print(howManyConstruct('brwrr', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+
+
+
+def howManyConstruct(target, wordbank, memo = None):
+    how_many = 0
+
     if memo is None:
         memo = {}
 
@@ -252,30 +359,25 @@ def canConstruct(target, wordBank, memo = None):
         return memo[target]
 
     if len(target) == 0:
-        return True
+        return 1
     
-    for word in wordBank:
-        front = target[:len(word)]
-        back = target[len(target) - len(word):]
-        if word in front:
-            new_target = target[len(word):]
-            if canConstruct(new_target, wordBank, memo):
-                memo[new_target] = True
-                return True
-        elif word in back:
-            new_target = target[:len(target) - len(word)]
-            if canConstruct(new_target, wordBank, memo):
-                memo[new_target] = True
-                return True
-    
-    memo[target] = False
+    for word in wordbank:
+        w = len(word)
+        front = target[:w]
+        
+        if word == front:
+            new_target = target[w:]
+            how_many += howManyConstruct(new_target, wordbank, memo)
+           
+    memo[target] = how_many
 
-    return False
+    return how_many
 
-
-print(canConstruct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']))   # true
-print(canConstruct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar']))    # false
-print(canConstruct('', ['cat', 'dog', 'mouse']))    # true
-print(canConstruct('enterapotentpot', ['a', 'p', 'ent', 'enter', 'ot', 'o', 't']))  # true
-print(canConstruct('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'ee', 'eee', 'eeee', 'eeeee', 'eeeeee']))  # false
-
+print(howManyConstruct('brwrr', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+print(howManyConstruct('bggr', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+print(howManyConstruct('gbbr', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+print(howManyConstruct('rrbgbr', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+print(howManyConstruct('ubwu', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+print(howManyConstruct('bwurrg', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+print(howManyConstruct('brgr', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
+print(howManyConstruct('bbrgwb', ['r', 'wr', 'b', 'g', 'bwu', 'rb', 'gb', 'br']))  # true
